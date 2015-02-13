@@ -1,0 +1,48 @@
+---
+- hosts: all
+  sudo: yes
+  sudo_user: vagrant
+  tasks:
+    - apt: update_cache=yes
+      sudo_user: root
+    - name: Install all apt-get packages
+      apt: name={{ item }} state=latest
+      sudo_user: root
+      with_items:
+        - git-core
+        - libxft-dev
+        - libxslt-dev
+        - libxml2-dev
+        - mysql-server
+        - libcurl4-openssl-dev
+        - libmysqlclient-dev
+        - libpq-dev
+
+    - name: Get RVM gpg key
+      shell: "gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3"
+
+    - name: Install RVM
+      shell: curl -sSL https://get.rvm.io | bash -s stable creates="~/.rvm"
+      args:
+        executable: /bin/bash
+
+    - name: Source RVM
+      shell: "source /home/vagrant/.rvm/scripts/rvm && rvm rvmrc trust ."
+      args:
+        executable: /bin/bash
+
+    - name: Install ruby
+      shell: "source ~/.bash_profile && rvm install 1.9.3"
+      args:
+        executable: /bin/bash
+
+    - name: Install bundler
+      shell: "source ~/.bash_profile && rvm all do gem install bundler"
+      args:
+        executable: /bin/bash
+
+    - name: cd to /vagrant in bash profile
+      lineinfile:
+      args:
+        dest: /home/vagrant/.bash_profile
+        line: "cd /vagrant"
