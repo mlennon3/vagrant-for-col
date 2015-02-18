@@ -36,7 +36,7 @@
         executable: /bin/bash
 
     - name: Source RVM
-      shell: "source /home/vagrant/.rvm/scripts/rvm && rvm rvmrc trust ."
+      shell: "source /home/vagrant/.rvm/scripts/rvm && rvm rvmrc trust /vagrant/.rvmrc"
       args:
         executable: /bin/bash
 
@@ -69,3 +69,9 @@
       args:
         dest: /home/vagrant/.bash_profile
         line: "cd /vagrant"
+
+    - name: Bundle install
+      shell: "source ~/.bash_profile && bundle install"
+      args:
+        executable: /bin/bash
+        chdir: "/vagrant"
