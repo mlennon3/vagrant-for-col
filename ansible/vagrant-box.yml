@@ -17,6 +17,14 @@
         - libcurl4-openssl-dev
         - libmysqlclient-dev
         - libpq-dev
+        - libbz2-dev
+        - libexpat-dev
+        - libncurses-dev
+        - build-essential
+        - curl
+        - m4
+        - texinfo
+        - zlib1g-dev
 
     - name: Get RVM gpg key
       shell: "gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3"
@@ -38,6 +46,20 @@
 
     - name: Install bundler
       shell: "source ~/.bash_profile && rvm all do gem install bundler"
+      args:
+        executable: /bin/bash
+
+    - name: Install linuxbrew
+      shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install | sed '/wait_for_user if STDIN.tty/d')\""
+      args:
+        executable: /bin/bash
+        creates: "/home/vagrant/.linuxbrew/"
+
+    - name: Put linuxbrew in bashrc
+      lineinfile: create=yes line="export PATH=\"$HOME/.linuxbrew/bin:$PATH\"" insertafter=EOF dest=~/.bash_profile
+
+    - name: Install redis
+      shell: "source ~/.bash_profile && ~/.linuxbrew/bin/brew install redis "
       args:
         executable: /bin/bash
 
