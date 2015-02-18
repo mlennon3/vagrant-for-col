@@ -25,6 +25,7 @@
         - m4
         - texinfo
         - zlib1g-dev
+        - default-jre
 
     - name: Get RVM gpg key
       shell: "gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3"
